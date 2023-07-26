@@ -4,12 +4,23 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GithubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
+import CredentialsProvider from "next-auth/providers/credentials";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
   providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize() {
+        return { id: "1", name: "J Smith", email: "jsmith@example.com" }
+      }
+    }),
     Auth0Provider({
       clientId: process.env.AUTH0_ID,
       clientSecret: process.env.AUTH0_SECRET,
